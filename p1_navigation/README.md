@@ -17,8 +17,6 @@ The goal of this project is to train an agent to navigate a virtual environment 
 The environment is built using [Unity ML-Agents Toolkit (v0.4)](https://github.com/Unity-Technologies/ml-agents).  
 The agent observes a **state vector of length 37**, which includes:
 
-- The agent’s **velocity**
-- A **ray-based perception** of objects surrounding the agent
 
 The **action space** is discrete with **4 possible actions**:
 
