@@ -9,6 +9,7 @@ drlnd/
 projeto_1/
 Value-based-methods/
 p1_navigation/Banana_Windows_x86_64/
+p2_continuous-control/Reacher_Windows_x86_64/
 # C extensions
 *.so
 
