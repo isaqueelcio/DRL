@@ -22,7 +22,9 @@ NUM_UPDATES = 10            # number of updates each time
 device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 
 class Agent():
+    """Interacts with and learns from the environment using DDPG algorithm."""
     def __init__(self, state_size, action_size, random_seed):
+        """Initialize an Agent object."""
         self.state_size = state_size
         self.action_size = action_size
         self.seed = random.seed(random_seed)
@@ -46,6 +48,9 @@ class Agent():
         self.t_step = 0
 
     def step(self, state, action, reward, next_state, done):
+        """
+        Store experience in replay memory and use random sample from buffer to learn.
+        """
         self.memory.add(state, action, reward, next_state, done)
         self.t_step = (self.t_step + 1) % UPDATE_EVERY
         if self.t_step == 0 and len(self.memory) > BATCH_SIZE:
@@ -54,6 +59,9 @@ class Agent():
                 self.learn(experiences, GAMMA)
 
     def act(self, state, add_noise=True):
+        """ 
+        Returns actions for given state as per current policy.
+        """
         state = torch.from_numpy(state).float().to(device)
         self.actor_local.eval()
         with torch.no_grad():
@@ -64,9 +72,15 @@ class Agent():
         return np.clip(action, -1, 1)
 
     def reset(self):
+        """
+        Reset the noise process.
+        """
         self.noise.reset()
 
     def learn(self, experiences, gamma):
+        """
+        Update policy and value parameters using given batch of experience tuples.
+        """
         states, actions, rewards, next_states, dones = experiences
 
         # ---------------------------- update critic ---------------------------- #
@@ -92,11 +106,18 @@ class Agent():
         self.soft_update(self.actor_local, self.actor_target, TAU)
 
     def soft_update(self, local_model, target_model, tau):
+        """
+        Soft update model parameters.
+        """
         for target_param, local_param in zip(target_model.parameters(), local_model.parameters()):
             target_param.data.copy_(tau * local_param.data + (1.0 - tau) * target_param.data)
 
 class ReplayBuffer:
+    """Fixed-size buffer to store experience tuples."""
     def __init__(self, action_size, buffer_size, batch_size, seed):
+        """ 
+        Initialize a ReplayBuffer object.
+        """
         self.action_size = action_size
         self.memory = deque(maxlen=buffer_size)
         self.batch_size = batch_size
@@ -104,10 +125,16 @@ class ReplayBuffer:
         self.seed = random.seed(seed)
 
     def add(self, state, action, reward, next_state, done):
+        """ 
+        Add a new experience to memory.
+        """
         e = self.experience(state, action, reward, next_state, done)
         self.memory.append(e)
 
     def sample(self):
+        """ 
+        Randomly sample a batch of experiences from memory.
+        """
         experiences = random.sample(self.memory, k=self.batch_size)
 
         states = torch.from_numpy(np.vstack([e.state for e in experiences if e is not None])).float().to(device)
@@ -119,10 +146,19 @@ class ReplayBuffer:
         return (states, actions, rewards, next_states, dones)
 
     def __len__(self):
+        """ 
+        Return the current size of internal memory.
+        """
         return len(self.memory)
 
 class OUNoise:
+    """
+    Ornstein-Uhlenbeck process for generating noise.
+    """
     def __init__(self, size, seed, mu=0., theta=0.15, sigma=0.2):
+        """ 
+        Initialize parameters and noise process.
+        """
         self.mu = mu * np.ones(size)
         self.theta = theta
         self.sigma = sigma
@@ -131,9 +167,15 @@ class OUNoise:
         self.reset()
 
     def reset(self):
+        """
+        Reset the internal state (noise) to mean (mu).
+        """
         self.state = copy.copy(self.mu)
 
     def sample(self):
+        """
+        Generate a noise sample using the Ornstein-Uhlenbeck process.
+        """
         dx = self.theta * (self.mu - self.state) + self.sigma * np.random.randn(self.size)
         self.state += dx
         return self.state
