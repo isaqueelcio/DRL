@@ -72,15 +72,12 @@ The agent successfully solved the environment:
 | 250     | 26.31          |
 | 274     | 30.03 ✅        |
 
-> ✅ **Environment solved in 274 episodes!**
+> **Environment solved in 274 episodes!**
 
+## 📊 5  Training Progress
+![Training Progress](img/output.png)
 ---
 
-## 📊 5. Training Curve
-
-The training showed a consistent upward trend in average score, with smooth convergence above the target of 30 points. The learning was stable and reproducible.
-
----
 
 ## 📁 6. Files Included
 
