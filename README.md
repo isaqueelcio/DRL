@@ -86,9 +86,8 @@ Repeat for other projects as needed.
 This nanodegree covers:
 
 - **Value-Based Methods:** DQN, Double DQN, Dueling DQN, Prioritized Experience Replay
-- **Policy-Based Methods:** REINFORCE, PPO, A3C
-- **Actor-Critic Methods:** DDPG, A2C, A3C
-- **Multi-Agent Reinforcement Learning:** MADDPG, Self-Play
+- **Policy-Based Methods:** REINFORCE, PPO, GAE, Actor-Critic (DDPG)
+- **Multi-Agent RL:** MADDPG, Markov Games, AlphaZero
 
 ---
 
